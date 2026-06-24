@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dialog Login</title>
+  <link rel="stylesheet" href="login.css" />
+  
+</head>
+<body>
+
+<!--Background-->
+<div class="bg">
+</div>
+
+<!--LOGIN SCREEN-->
+<div class="card" id="loginScreen">
+  <div class="logo-wrap">
+    <img src="/img/logo2.png" alt="Dialog Logo" class="logo-icon">
+</div>
+
+  <div class="screen active" id="screen-login">
+    <h1>Welcome back</h1>
+    <p class="subtitle">Enter your Dialog mobile number or<br>email address to continue</p>
+
+    <div class="input-wrap">
+      <input type="text" id="loginInput" placeholder="07X XXX XXXX or email@gmail.com"
+             autocomplete="off" inputmode="text"/>
+    </div>
+
+    <button class="btn-primary" onclick="goToOTP()">Continue</button>
+
+    <p class="helper-text">Don't have a Dialog ID? <a href="#">Create ID</a></p>
+
+    <div class="help-pill">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="7" stroke="#e8001c" stroke-width="1.4"/>
+        <text x="8" y="12" text-anchor="middle" font-size="9" fill="#e8001c" font-weight="700">?</text>
+      </svg>
+      How do I login?
+    </div>
+  </div>
+</div>
+
+<!--OTP SCREEN-->
+<div class="card" id="otpScreen" style="display:none;">
+  <div class="logo-wrap">
+    <img src="/img/logo2.png" alt="Dialog Logo" class="logo-icon">
+  </div>
+
+  <h1>Verify Number</h1>
+  <p class="subtitle" id="otpSubtitle">A 6-digit OTP has been sent to<br><strong id="sentTo">07X XXX XXXX</strong></p>
+
+  <div class="otp-wrap" id="otpBoxes" style="margin-top:28px;">
+    <input class="otp-box" type="number" maxlength="1" data-index="0" inputmode="numeric"/>
+    <input class="otp-box" type="number" maxlength="1" data-index="1" inputmode="numeric"/>
+    <input class="otp-box" type="number" maxlength="1" data-index="2" inputmode="numeric"/>
+    <input class="otp-box" type="number" maxlength="1" data-index="3" inputmode="numeric"/>
+    <input class="otp-box" type="number" maxlength="1" data-index="4" inputmode="numeric"/>
+    <input class="otp-box" type="number" maxlength="1" data-index="5" inputmode="numeric"/>
+  </div>
+
+  <p class="resend-row">Didn't receive code? <a id="resendLink" href="#">Resend in <span id="timer">0:45</span></a></p>
+
+  <button type="button" class="btn-primary" onclick="window.location.href='home.html'">
+    Login
+</button>
+  <button class="btn-secondary" onclick="changeNumber()">Change Number</button>
+</div>
+
+<script>
+  /*Navigate to OTP*/
+  function goToOTP() {
+    const val = document.getElementById('loginInput').value.trim();
+    if (!val) {
+      document.getElementById('loginInput').focus();
+      return;
+    }
+    document.getElementById('sentTo').textContent = val;
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('otpScreen').style.display  = 'block';
+    startTimer(45);
+    setTimeout(() => document.querySelector('.otp-box').focus(), 100);
+  }
+
+  /*OTP box auto-advance*/
+  const boxes = document.querySelectorAll('.otp-box');
+  boxes.forEach((box, i) => {
+    box.addEventListener('input', () => {
+      const val = box.value.replace(/\D/g, '');
+      box.value = val ? val.slice(-1) : '';
+      if (val && i < boxes.length - 1) boxes[i + 1].focus();
+    });
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !box.value && i > 0) boxes[i - 1].focus();
+    });
+    box.addEventListener('paste', e => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+      [...text].slice(0, 6).forEach((ch, j) => { if (boxes[j]) boxes[j].value = ch; });
+      const last = Math.min(text.length, 5);
+      boxes[last] && boxes[last].focus();
+    });
+  });
+
+  /*Countdown timer*/
+  let timerID;
+  function startTimer(seconds) {
+    clearInterval(timerID);
+    const link = document.getElementById('resendLink');
+    const timerEl = document.getElementById('timer');
+    link.style.pointerEvents = 'none';
+    link.style.opacity = '1';
+
+    let s = seconds;
+    timerEl.textContent = fmt(s);
+
+    timerID = setInterval(() => {
+      s--;
+      if (s <= 0) {
+        clearInterval(timerID);
+        link.innerHTML = '<span style="color:#9b3fa0;font-weight:600;cursor:pointer" onclick="resendOTP()">Resend now</span>';
+        link.style.pointerEvents = 'auto';
+      } else {
+        timerEl.textContent = fmt(s);
+      }
+    }, 1000);
+  }
+  function fmt(s) { return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+
+  function resendOTP() {
+    document.getElementById('resendLink').innerHTML = 'Resend in <span id="timer">0:45</span>';
+    boxes.forEach(b => b.value = '');
+    boxes[0].focus();
+    startTimer(45);
+  }
+
+  /*Login action*/
+  function doLogin() {
+    const otp = [...boxes].map(b => b.value).join('');
+    if (otp.length < 6) { boxes[otp.length < 1 ? 0 : otp.length].focus(); return; }
+    alert('Login successful! OTP: ' + otp);
+  }
+
+  /*Change number*/
+  function changeNumber() {
+    clearInterval(timerID);
+    boxes.forEach(b => b.value = '');
+    document.getElementById('otpScreen').style.display  = 'none';
+    document.getElementById('loginScreen').style.display = 'block';
+    document.getElementById('loginInput').value = '';
+    document.getElementById('loginInput').focus();
+  }
+</script>
+</body>
+</html>

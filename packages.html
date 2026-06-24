@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dialog Packages</title>
+    <link rel="stylesheet" href="packages.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <!-- Dialog Logo -->
+     <img src="/img/logo2.png" alt="Dialog Logo" class="logo-icon">
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="/home.html">Home</a></li>
+    <li><a href="#">Mobile</a></li>
+    <li><a href="#">Wifi</a></li>
+    <li><a href="#">Television</a></li>
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">Business</a></li>
+    <li><a href="#">Support</a></li>
+    <li><a href="#">FAQ</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="notif-btn" aria-label="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+      <span class="notif-dot"></span>
+    </button>
+    <div class="avatar">VR</div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="navDrawer">
+  <a href="/home.html">Home</a>
+  <a href="#">Mobile</a>
+  <a href="#">Wifi</a>
+  <a href="#">Television</a>
+  <a href="#">Shop</a>
+  <a href="#">Business</a>
+  <a href="#">Support</a>
+  <a href="#">FAQ</a>
+</div>
+
+<!-- MAIN -->
+<main>
+  <h1 class="page-title">Packages</h1>
+  <p class="page-sub">Browse and manage your Dialog packages</p>
+
+  <!-- Current Plan -->
+  <div class="current-plan">
+    <div>
+      <div class="plan-label">Current Plan</div>
+      <div class="plan-name">Fun Blaster 797</div>
+      <div class="plan-expires">Expires 30 May 2027</div>
+    </div>
+    <button class="btn-change">Change Package</button>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-row" id="filterRow">
+    <button class="filter-btn active" data-filter="all">All Packages</button>
+    <button class="filter-btn" data-filter="data">Data</button>
+    <button class="filter-btn" data-filter="voice">Voice</button>
+    <button class="filter-btn" data-filter="combo">Combo</button>
+    <button class="filter-btn" data-filter="idd">IDD</button>
+    <button class="filter-btn" data-filter="roaming">Roaming</button>
+  </div>
+
+  <!-- Search + Sort toolbar -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search Packages..." />
+    </div>
+
+    <div class="sort-wrap">
+      <span>Sort by:</span>
+      <select id="sortSelect">
+        <option value="recommended">Recommended</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="cards-grid" id="cardsGrid"></div>
+</main>
+
+<script>
+  // DATA
+  const packages = [
+    {
+      id: 1,
+      category: 'data',
+      name: 'Fun Blaster 247',
+      desc: 'Unlimited Youtube, Facebook, Whatsapp, Instagram',
+      price: 200,
+      period: '7 days',
+      features: [
+        '1 GB Bonus Any Time Data',
+        'Videos will be on 1Mbps speed & SD Quality (360p)'
+      ]
+    },
+    {
+      id: 2,
+      category: 'data',
+      name: 'Fun Blaster 488',
+      desc: 'Facebook, WhatsApp, IMO, Viber & Instagram',
+      price: 488,
+      period: '30 days',
+      features: [
+        '2 GB Bonus Any Time Data',
+        'Extra Data Usage charged at Rs 0.3 + Tax per MB'
+      ]
+    },
+    
+    {
+      id: 4,
+      category: 'data',
+      name: 'Fun Blaster 1599',
+      desc: 'Anytime Data',
+      price: 1599,
+      period: '30 days',
+      features: [
+        '50 GB Anytime Data',
+        '4G Device and 4G SIM is required'
+      ]
+    },
+    {
+      id: 5,
+      category: 'voice',
+      name: 'Call Blaster 198',
+      desc: 'Any net calls (Including local landlines)',
+      price: 198,
+      period: '30 days',
+      features: [
+        '250 minutes Any net calls',
+        '250 Any net SMS'
+      ]
+    },
+    {
+      id: 6,
+      category: 'voice',
+      name: 'Fun Blaster 298',
+      desc: 'Any net calls (Including local landlines)',
+      price: 298,
+      period: '30 days',
+      features: [
+        '400 minutes Any net calls',
+        '400 Any net SMS'
+      ]
+    },
+    {
+      id: 7,
+      category: 'voice',
+      name: 'Call Blaster 508',
+      desc: 'Unlimited Dialog to Dialog / Airtel Calls',
+      price: 508,
+      period: '30 days',
+      features: [
+        '1000 Dialog to Dialog / Airtel SMS',
+        'Customers will be allowed to check the validity period of the plan via the MyDialog App'
+      ]
+    },
+    {
+      id: 8,
+      category: 'combo',
+      name: 'Fun Blaster 198',
+      desc: 'Data, Voice, SMS Combo',
+      price: 198,
+      period: '30 days',
+      features: [
+        '250 minutes Any net calls',
+        '250 Any net SMS',
+        '2 GB Any Time Data'
+      ]
+    },
+    {
+      id: 9,
+      category: 'combo',
+      name: 'Fun Blaster 747',
+      desc: 'Data, Voice, SMS Combo',
+      price: 747,
+      period: '30 days',
+      features: [
+        '1000 minutes Any net calls',
+        '1000 Any net SMS',
+        '4 GB Any Time Data'
+      ]
+    },
+    {
+      id: 10,
+      category: 'combo',
+      name: 'Unlimited Blaster 999',
+      desc: 'Data, Voice, SMS Combo',
+      price: 999,
+      period: '30 days',
+      features: [
+        '1000 minutes Any net calls',
+        '1000 Any net SMS',
+        '30 GB Any Time Data & Unlimited Social Media'
+      ]
+    }
+  ];
+
+  //STATE
+  let activeFilter = 'all';
+  let searchQuery  = '';
+  let sortOrder    = 'recommended';
+
+  //RENDER
+  function checkIcon() {
+    return `<svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="#4caf82" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+  }
+
+  function badgeClass(cat) {
+    if (cat === 'data')  return 'badge data';
+    if (cat === 'voice') return 'badge voice';
+    if (cat === 'combo') return 'badge combo';
+    return 'badge';
+  }
+
+  function badgeLabel(cat) {
+    return cat.charAt(0).toUpperCase() + cat.slice(1);
+  }
+
+  function renderCard(pkg) {
+    return `
+      <div class="card" data-category="${pkg.category}" data-price="${pkg.price}">
+        <span class="${badgeClass(pkg.category)}">${badgeLabel(pkg.category)}</span>
+        <div class="card-title">${pkg.name}</div>
+        <div class="card-desc">${pkg.desc}</div>
+        <div class="price-row">
+          <span class="price-currency">Rs.</span>
+          <span class="price-amount">${pkg.price.toLocaleString()}</span>
+          <span class="price-period">/ ${pkg.period}</span>
+        </div>
+        <ul class="features">
+          ${pkg.features.map(f => `<li>${checkIcon()}<span>${f}</span></li>`).join('')}
+        </ul>
+        <div class="card-actions">
+          <button class="btn-subscribe">Subscribe</button>
+          <button class="btn-details">Details</button>
+        </div>
+      </div>`;
+  }
+
+  function getFiltered() {
+    let list = packages.slice();
+
+    //filter by category
+    if (activeFilter !== 'all' && activeFilter !== 'idd' && activeFilter !== 'roaming') {
+      list = list.filter(p => p.category === activeFilter);
+    }
+    if (activeFilter === 'idd' || activeFilter === 'roaming') {
+      list = [];
+    }
+
+    // search
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.desc.toLowerCase().includes(q) ||
+        p.features.some(f => f.toLowerCase().includes(q))
+      );
+    }
+
+    // sort
+    if (sortOrder === 'price-asc')  list.sort((a, b) => a.price - b.price);
+    if (sortOrder === 'price-desc') list.sort((a, b) => b.price - a.price);
+
+    return list;
+  }
+
+  function render() {
+    const grid = document.getElementById('cardsGrid');
+    const list = getFiltered();
+    if (list.length === 0) {
+      grid.innerHTML = `<div class="empty-state">No packages found. Try a different filter or search term.</div>`;
+    } else {
+      grid.innerHTML = list.map(renderCard).join('');
+    }
+  }
+
+  // EVENTS
+  document.getElementById('filterRow').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    render();
+  });
+
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchQuery = e.target.value;
+    render();
+  });
+
+  document.getElementById('sortSelect').addEventListener('change', e => {
+    sortOrder = e.target.value;
+    render();
+  });
+
+  // hamburger
+  document.getElementById('hamburgerBtn').addEventListener('click', () => {
+    document.getElementById('navDrawer').classList.toggle('open');
+  });
+
+  // initial render
+  render();
+</script>
+</body>
+</html>
